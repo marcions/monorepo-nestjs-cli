@@ -2,11 +2,11 @@ import fs from 'fs';
 import { bold, green, red } from 'colorette';
 const fse = require('fs-extra');
 import path from 'path';
-const { getController, getAdapter, getModule, getService, getSwagger } = require('./scafold/module');
-const { getControllerTest, getModuleTest, getServiceTest } = require('./scafold/tests');
-const { getJestConfig, getTsconfigBuild, getTsconfig, getPackage, getDockerFile, getDockerignore, getEslintIgonre, vsCode, getEslint } = require('./scafold/app/root');
-const { getTests } = require('./scafold/app/tests');
-const { getMain, getSourceModule, health, healthTests } = require('./scafold/app/src');
+const { getController, getAdapter, getModule, getService, getSwagger } = require('./scaffold/module');
+const { getControllerTest, getModuleTest, getServiceTest } = require('./scaffold/tests');
+const { getJestConfig, getTsconfigBuild, getTsconfig, getPackage, getDockerFile, getDockerignore, getEslintIgonre, vsCode, getEslint } = require('./scaffold/app/root');
+const { getTests } = require('./scaffold/app/tests');
+const { getMain, getSourceModule, health, healthTests } = require('./scaffold/app/src');
 const { exec } = require('child_process');
 const cliSelect = require('cli-select');
 const prompt = require('prompt-sync')();
@@ -15,7 +15,7 @@ const prompt = require('prompt-sync')();
 const createMonorepoApp = async (name) => {
   if (!name) throw new Error('--name is required')
   name = name.toLowerCase()
-  const dirRoot = `${__dirname}/scafold/templates/${name}-api`
+  const dirRoot = `${__dirname}/scaffold/templates/${name}-api`
 
   try {
     if (fs.existsSync(dirRoot)) {
@@ -27,10 +27,20 @@ const createMonorepoApp = async (name) => {
     fs.writeFileSync(`${dirRoot}/.eslintignore`, getEslintIgonre())
     fs.writeFileSync(`${dirRoot}/.eslintrc.js `, getEslint())
     fs.writeFileSync(`${dirRoot}/jest.config.js`, getJestConfig())
-    fs.writeFileSync(`${dirRoot}/Dockerfile`, getDockerFile(name))
     fs.writeFileSync(`${dirRoot}/package.json`, getPackage(name).replace(/''/g, '\''))
     fs.writeFileSync(`${dirRoot}/tsconfig.build.json`, getTsconfigBuild())
     fs.writeFileSync(`${dirRoot}/tsconfig.json`, getTsconfig(name))
+
+
+    const dirDocker = dirRoot + '/docker'
+
+    if (fs.existsSync(dirDocker)) {
+      fs.rmSync(dirDocker, { recursive: true });
+    }
+
+    fs.mkdirSync(dirDocker)
+    fs.writeFileSync(`${dirDocker}/Dockerfile`, getDockerFile(name))
+
 
     const dirVsCode = dirRoot + '/.vscode'
 
@@ -113,7 +123,7 @@ const createMonorepoApp = async (name) => {
 const createMonorepoModule = async (name) => {
   if (!name) throw new Error('--name is required')
   name = name.toLowerCase()
-  const dir = `${__dirname}/scafold/templates/${name}`
+  const dir = `${__dirname}/scaffold/templates/${name}`
 
   try {
 
@@ -153,7 +163,7 @@ const createMonorepoModule = async (name) => {
 }
 
 const createMonorepoTest = async (name) => {
-  const dir = `${__dirname}/scafold/templates/__tests__`
+  const dir = `${__dirname}/scaffold/templates/__tests__`
 
   try {
 
@@ -225,7 +235,7 @@ export async function cli(args) {
 
   for (const key in options) {
     if (options[key]) {
-      paths.push(path.resolve(`${__dirname}/../src/scafold/templates/`, options[key]))
+      paths.push(path.resolve(`${__dirname}/../src/scaffold/templates/`, options[key]))
     }
   }
 

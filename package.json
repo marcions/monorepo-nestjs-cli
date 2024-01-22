@@ -1,7 +1,16 @@
 {
-  "name": "@mikemajesty/monorepo-nestjs-cli",
-  "version": "0.1.10",
-  "description": "Monorepo CLI",
+  "name": "@marcions/monorepo-nestjs-cli",
+  "version": "1.0.00",
+  "description": "NestJS Monorepo CLI",
+  "author": {
+    "name": "Marcio Sales",
+    "email": "marcionsales@hotmail.com"
+  },
+  "homepage": "https://github.com/marcions/monorepo-nestjs-cli#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/marcions/monorepo-nestjs-cli.git"
+  },
   "main": "src/cli.js",
   "scripts": {
     "permission": "chmod -R 777 ./bin/*"

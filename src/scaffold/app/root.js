@@ -38,7 +38,7 @@ const getTsconfig = (name) => {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "declaration": false,
-    "outDir": "../../dist/apps/${name}-api"
+    "outDir": "../../dist/apps/${name}"
 },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
@@ -48,20 +48,20 @@ const getTsconfig = (name) => {
 
 const getPackage = (name) => {
   return `{
-  "name": "@app/${name}.api",
+  "name": "@app/${name}",
   "version": "v0.0.1",
-  "description": "monorepo ${name}-api",
+  "description": "monorepo ${name}",
+  "author": {
+    "name": "Marcio Sales",
+    "email": "marcionsales@hotmail.com"
+  },
   "scripts": {
     "format": "../../tools/eslint/node_modules/.bin/prettier --write \''**/*.{ts, js, json}\''",
     "test": "../../node_modules/jest/bin/jest.js --maxWorkers=50%",
     "lint": "yarn format && ../../tools/eslint/node_modules/.bin/eslint \''src/**/*.{ts, js, json}\'' --fix"
   },
-  "author": {
-    "name": "Mike Lima",
-    "email": "mike.rodrigues.lima@gmail.com"
-  },
   "engines": {
-    "node": ">=14 <=16"
+    "node": ">=18 <=20"
   },
   "license": "MIT",
   "dependencies": {},
@@ -79,26 +79,26 @@ WORKDIR /app
 
 RUN ls /app -al
 
-RUN yarn && yarn build @app/${name}-api
+RUN yarn && yarn build @app/${name}
 
-COPY apps/${name}-api/package.json dist/apps/${name}-api/
-COPY apps/${name}-api/tsconfig.build.json dist/apps/${name}-api/
-COPY apps/${name}-api/tsconfig.json dist/apps/${name}-api/
+COPY apps/${name}/package.json dist/apps/${name}/
+COPY apps/${name}/tsconfig.build.json dist/apps/${name}/
+COPY apps/${name}/tsconfig.json dist/apps/${name}/
 
 EXPOSE 4000
 
-RUN yarn --cwd dist/apps/${name}-api
+RUN yarn --cwd dist/apps/${name}
 RUN yarn --cwd dist/apps/libs/modules
 RUN yarn --cwd dist/apps/libs/utils
 RUN yarn --cwd dist/apps/libs/core
 
-RUN ls dist/apps/${name}-api -al
+RUN ls dist/apps/${name} -al
 
 RUN ls /app -al
 
 RUN yarn
 
-CMD yarn --cwd apps start:${name}-api:prd
+CMD yarn --cwd apps start:${name}:prd
 `
 }
 
@@ -143,7 +143,7 @@ const vsCode = (name) => {
       "localRoot": "##{workspaceFolder}/../../",
       "runtimeExecutable": "yarn",
       "runtimeArgs": [
-        "start:${name}-api:dev"
+        "start:${name}:dev"
       ],
       "console": "integratedTerminal",
       "smartStep": true,
