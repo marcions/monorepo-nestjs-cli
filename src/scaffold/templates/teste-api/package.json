@@ -1,0 +1,20 @@
+{
+  "name": "@app/teste",
+  "version": "v0.0.1",
+  "description": "monorepo teste",
+  "author": {
+    "name": "Marcio Sales",
+    "email": "marcionsales@hotmail.com"
+  },
+  "scripts": {
+    "format": "../../tools/eslint/node_modules/.bin/prettier --write '**/*.{ts, js, json}'",
+    "test": "../../node_modules/jest/bin/jest.js --maxWorkers=50%",
+    "lint": "yarn format && ../../tools/eslint/node_modules/.bin/eslint 'src/**/*.{ts, js, json}' --fix"
+  },
+  "engines": {
+    "node": ">=18 <=20"
+  },
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {}
+}
