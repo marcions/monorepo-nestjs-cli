@@ -15,7 +15,7 @@ const prompt = require('prompt-sync')();
 const createMonorepoApp = async (name) => {
   if (!name) throw new Error('--name is required')
   name = name.toLowerCase()
-  const dirRoot = `${__dirname}/scaffold/templates/${name}-api`
+  const dirRoot = `${__dirname}/scaffold/templates/${name}`
 
   try {
     if (fs.existsSync(dirRoot)) {
