@@ -16,7 +16,7 @@
     "permission": "chmod -R 777 ./bin/*"
   },
   "bin": {
-    "@mikemajesty/monorepo-nestjs-cli": "bin/monorepo-nestjs-cli",
+    "@marcions/monorepo-nestjs-cli": "bin/monorepo-nestjs-cli",
     "monorepo-nestjs-cli": "bin/monorepo-nestjs-cli"
   },
   "publishConfig": {
