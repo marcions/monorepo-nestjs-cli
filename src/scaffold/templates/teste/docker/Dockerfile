@@ -1,4 +1,4 @@
-FROM node:14
+FROM node:20
 
 ADD . /app
 
@@ -15,9 +15,10 @@ COPY apps/teste/tsconfig.json dist/apps/teste/
 EXPOSE 4000
 
 RUN yarn --cwd dist/apps/teste
-RUN yarn --cwd dist/apps/libs/modules
-RUN yarn --cwd dist/apps/libs/utils
+RUN yarn --cwd dist/apps/libs/auth
 RUN yarn --cwd dist/apps/libs/core
+RUN yarn --cwd dist/apps/libs/infra
+RUN yarn --cwd dist/apps/libs/utils
 
 RUN ls dist/apps/teste -al
 

@@ -1,4 +1,4 @@
-import { name } from 'apps/teste-api/package.json';
+import { name } from 'apps/teste/package.json';
 import { Swagger } from 'libs/utils/documentation/swagger';
 
 export const SwagggerResponse = {

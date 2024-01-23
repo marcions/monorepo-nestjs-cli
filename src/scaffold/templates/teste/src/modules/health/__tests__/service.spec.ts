@@ -1,7 +1,7 @@
 import { Test } from '@nestjs/testing';
-import { ILoggerService } from 'libs/modules/global/logger/adapter';
+import { ILoggerAdapter } from 'libs/infra/logger/adapter';
 
-import { name, version } from '../../../../package.json';
+import { name, version } from 'apps/teste/package.json';
 import { IHealthService } from '../adapter';
 import { HealthService } from '../service';
 
@@ -14,7 +14,7 @@ describe('HealthService', () => {
       providers: [
         {
           provide: IHealthService,
-          useFactory: () => new HealthService({ info: jest.fn() } as unknown as ILoggerService),
+          useFactory: () => new HealthService({ info: jest.fn() } as unknown as ILoggerAdapter),
         },
       ],
     }).compile();

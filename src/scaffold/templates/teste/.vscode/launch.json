@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "App: @app/teste.api",
+      "name": "App: @app/teste",
       "type": "node",
       "request": "launch",
       "localRoot": "${workspaceFolder}/../../",
@@ -19,7 +19,7 @@
       ]
     },
     {
-      "name": "Test: @app/teste.api",
+      "name": "Test: @app/teste",
       "type": "node",
       "args": [
         "--runInBand",

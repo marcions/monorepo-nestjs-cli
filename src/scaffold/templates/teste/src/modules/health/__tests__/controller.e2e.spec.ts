@@ -1,10 +1,10 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { ILoggerService } from 'libs/modules/global/logger/adapter';
-import { ApiException } from 'libs/utils';
-import * as request from 'supertest';
+import { ILoggerAdapter } from 'libs/infra/logger/adapter';
+import { ApiInternalServerException } from 'libs/utils/exception';
+import request from 'supertest';
 
-import { name, version } from '../../../../package.json';
+import { name, version } from 'apps/teste/package.json';
 import { IHealthService } from '../adapter';
 import { HealthController } from '../controller';
 import { HealthService } from '../service';
@@ -19,7 +19,7 @@ describe('HealthController (e2e)', () => {
       providers: [
         {
           provide: IHealthService,
-          useFactory: () => new HealthService({ info: jest.fn() } as unknown as ILoggerService),
+          useFactory: () => new HealthService({ info: jest.fn() } as unknown as ILoggerAdapter),
         },
       ],
       imports: [],

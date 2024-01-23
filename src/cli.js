@@ -4,9 +4,9 @@ const fse = require('fs-extra');
 import path from 'path';
 const { getController, getAdapter, getModule, getService, getSwagger } = require('./scaffold/module');
 const { getControllerTest, getModuleTest, getServiceTest } = require('./scaffold/tests');
-const { getJestConfig, getTsconfigBuild, getTsconfig, getPackage, getDockerFile, getDockerignore, getEslintIgonre, vsCode, getEslint } = require('./scaffold/app/root');
+const { getJestConfig, getTsconfigBuild, getTsconfig, getPackage, getDockerFile, getEnv, getDockerignore, getEslintIgonre, vsCode, getEslint } = require('./scaffold/app/root');
 const { getTests } = require('./scaffold/app/tests');
-const { getMain, getSourceModule, health, healthTests } = require('./scaffold/app/src');
+const { getMain, getSourceModule, health, healthTests, app } = require('./scaffold/app/src');
 const { exec } = require('child_process');
 const cliSelect = require('cli-select');
 const prompt = require('prompt-sync')();
@@ -24,6 +24,7 @@ const createMonorepoApp = async (name) => {
 
     fs.mkdirSync(dirRoot)
     fs.writeFileSync(`${dirRoot}/.dockerignore`, getDockerignore())
+    fs.writeFileSync(`${dirRoot}/.env`, getEnv(name))
     fs.writeFileSync(`${dirRoot}/.eslintignore`, getEslintIgonre())
     fs.writeFileSync(`${dirRoot}/.eslintrc.js `, getEslint())
     fs.writeFileSync(`${dirRoot}/jest.config.js`, getJestConfig())
@@ -80,7 +81,7 @@ const createMonorepoApp = async (name) => {
     }
 
     fs.mkdirSync(dirModule)
-    fs.writeFileSync(`${dirModule}/module.ts`, getSourceModule())
+    fs.writeFileSync(`${dirModule}/module.ts`, getSourceModule(name))
 
 
     const dirHealth = dirModule + '/health'
@@ -108,14 +109,28 @@ const createMonorepoApp = async (name) => {
     fs.writeFileSync(`${dirHealthTests}/service.spec.ts`, healthTests(name).service.replace(/##/g, '$').replace(/''/g, '`'))
     fs.writeFileSync(`${dirHealthTests}/module.spec.ts`, healthTests(name).module)
 
-    return `${name}-api`
+    const dirApp = dirModule + '/' + name
+
+    if (fs.existsSync(dirApp)) {
+      fs.rmSync(dirApp, { recursive: true });
+    }
+
+    fs.mkdirSync(dirApp)
+
+    fs.writeFileSync(`${dirApp}/adapter.ts`, app(name).adapter)
+    fs.writeFileSync(`${dirApp}/controller.ts`, app(name).controller)
+    fs.writeFileSync(`${dirApp}/module.ts`, app(name).module)
+    fs.writeFileSync(`${dirApp}/repository.ts`, app(name).repository.replace(/##/g, '$').replace(/''/g, '`'))
+    fs.writeFileSync(`${dirApp}/swagger.ts`, app(name).swagger.replace(/##/g, '$').replace(/''/g, '`'))
+
+    return `${name}`
   } catch (error) {
     console.log('error', error)
     if (fs.existsSync(dirRoot)) {
       fs.rmSync(dirRoot, { recursive: true });
     }
 
-    return `${name}-api`
+    return `${name}`
   }
 
 }

@@ -50,7 +50,7 @@ const getPackage = (name) => {
   return `{
   "name": "@app/${name}",
   "version": "v0.0.1",
-  "description": "monorepo ${name}",
+  "description": "${name}",
   "author": {
     "name": "Marcio Sales",
     "email": "marcionsales@hotmail.com"
@@ -71,7 +71,7 @@ const getPackage = (name) => {
 }
 
 const getDockerFile = (name) => {
-  return `FROM node:14
+  return `FROM node:20
 
 ADD . /app
 
@@ -88,9 +88,10 @@ COPY apps/${name}/tsconfig.json dist/apps/${name}/
 EXPOSE 4000
 
 RUN yarn --cwd dist/apps/${name}
-RUN yarn --cwd dist/apps/libs/modules
-RUN yarn --cwd dist/apps/libs/utils
+RUN yarn --cwd dist/apps/libs/auth
 RUN yarn --cwd dist/apps/libs/core
+RUN yarn --cwd dist/apps/libs/infra
+RUN yarn --cwd dist/apps/libs/utils
 
 RUN ls dist/apps/${name} -al
 
@@ -126,6 +127,27 @@ const getDockerignore = () => {
 `
 }
 
+const getEnv = (name) => {
+  return `
+  HOST=http://localhost
+  ${name.toUpperCase()}_PORT=4000
+  ENV='DEV'
+
+  # POSTGRES
+  POSTGRES_HOST=localhost
+  POSTGRES_PORT=5432
+  POSTGRES_USER=admin
+  POSTGRES_PASSWORD=admin
+  #POSTGRES_DATABASE=nestjs-microservice
+  POSTGRES_DATABASE=db
+
+  # PGADMIN
+  PGADMIN_URL=http://localhost:16543
+  PGADMIN_DEFAULT_EMAIL="pgadmin@gmail.com"
+  PGADMIN_DEFAULT_PASSWORD="admin"
+`
+}
+
 const vsCode = (name) => {
   return {
     extensions: `{
@@ -137,7 +159,7 @@ const vsCode = (name) => {
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "App: @app/${name}.api",
+      "name": "App: @app/${name}",
       "type": "node",
       "request": "launch",
       "localRoot": "##{workspaceFolder}/../../",
@@ -154,7 +176,7 @@ const vsCode = (name) => {
       ]
     },
     {
-      "name": "Test: @app/${name}.api",
+      "name": "Test: @app/${name}",
       "type": "node",
       "args": [
         "--runInBand",
@@ -205,4 +227,4 @@ const vsCode = (name) => {
   }
 }
 
-module.exports = { getJestConfig, getTsconfigBuild, getTsconfig, getPackage, getDockerFile, getDockerignore, getEslintIgonre, vsCode, getEslint }
+module.exports = { getJestConfig, getTsconfigBuild, getTsconfig, getPackage, getDockerFile, getEnv, getDockerignore, getEslintIgonre, vsCode, getEslint }

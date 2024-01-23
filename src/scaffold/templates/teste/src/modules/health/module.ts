@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { LoggerModule } from 'libs/modules/global/logger/module';
+import { LoggerModule } from 'libs/infra/logger/module';
 
 import { IHealthService } from './adapter';
 import { HealthController } from './controller';
